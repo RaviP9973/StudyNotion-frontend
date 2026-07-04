@@ -11,7 +11,8 @@ const {
   LOGIN_API,
   RESETPASSTOKEN_API,
   RESETPASSWORD_API,
-  CHANGE_PASSWORD_API
+  CHANGE_PASSWORD_API,
+  LOGOUT_API
 } = endpoints
 
 export function login(email, password, navigate) {
@@ -42,6 +43,7 @@ export function login(email, password, navigate) {
       console.log(response.data.token);
       const userImage = response.data?.user?.image?  response.data?.user?.image : `https://api.dicebear.com/5.x/initials/svg?seed=${response.data.user.firstName} ${response.data.user.lastName}`
       dispatch(setUser({...response.data.user,image:userImage}))
+      // set ttl here
       localStorage.setItem("token",JSON.stringify(response.data.token))
       localStorage.setItem("user",JSON.stringify(response.data.user))
       navigate("/dashboard/my-profile");
@@ -174,7 +176,18 @@ export async function changepassword(token,formData){
 }
 
 export function logout(navigate){
-  return (dispatch) => {
+  return async (dispatch, getState) => {
+    dispatch(setLoading(true));
+    try {
+      const token = getState().auth.token || (localStorage.getItem("token") ? JSON.parse(localStorage.getItem("token")) : null);
+      if (token) {
+        await apiConnector("POST", LOGOUT_API, null, {
+          Authorization: `Bearer ${token}`,
+        });
+      }
+    } catch (error) {
+      console.log("Logout Api error...", error);
+    }
     dispatch(setToken(null));
     dispatch(setUser(null));
     dispatch(resetCart());
@@ -182,6 +195,6 @@ export function logout(navigate){
     localStorage.removeItem("user");
     toast.success("Logged out");
     navigate("/");
-    
+    dispatch(setLoading(false));
   }
 }

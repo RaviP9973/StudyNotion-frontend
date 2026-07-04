@@ -7,7 +7,7 @@ const {REVIEWS_DETAILS_API} = ratingEndpoints;
 export const getAllRating = async() => {
     let result = [];
     try {
-        console.log(REVIEWS_DETAILS_API);
+        // console.log(REVIEWS_DETAILS_API);
         const res = await apiConnector("GET",REVIEWS_DETAILS_API);
         if(!res.data.success){
             throw new Error("Error while fetching reviews");

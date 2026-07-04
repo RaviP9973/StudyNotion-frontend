@@ -18,7 +18,7 @@ const ReviewSlider = () => {
     const fetchAllReviews = async () => {
       setLoading(true);
       const res = await getAllRating();
-      console.log("res", res);
+      // console.log("res", res);
       if (res) {
         setReviews(res);
       }
