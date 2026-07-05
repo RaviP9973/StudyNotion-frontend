@@ -134,7 +134,7 @@ function App() {
             </PrivateRoute>
           }>
             {
-              user?.accountType === "Student" && (
+              user?.accountType === ACCOUNT_TYPE.STUDENT && (
                 <>
                   <Route path="view-course/course/:courseId/section/:sectionId/subSection/:subsectionId" element={<VideoDetails />} />
                 </>

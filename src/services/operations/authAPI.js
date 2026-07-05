@@ -39,12 +39,9 @@ export function login(email, password, navigate) {
       }
 
       toast.success("Login Successfull");
-      dispatch(setToken(response.data.token));
-      console.log(response.data.token);
+      dispatch(setToken("authenticated"));
       const userImage = response.data?.user?.image?  response.data?.user?.image : `https://api.dicebear.com/5.x/initials/svg?seed=${response.data.user.firstName} ${response.data.user.lastName}`
       dispatch(setUser({...response.data.user,image:userImage}))
-      // set ttl here
-      localStorage.setItem("token",JSON.stringify(response.data.token))
       localStorage.setItem("user",JSON.stringify(response.data.user))
       navigate("/dashboard/my-profile");
     } catch (error) {
@@ -179,12 +176,7 @@ export function logout(navigate){
   return async (dispatch, getState) => {
     dispatch(setLoading(true));
     try {
-      const token = getState().auth.token || (localStorage.getItem("token") ? JSON.parse(localStorage.getItem("token")) : null);
-      if (token) {
-        await apiConnector("POST", LOGOUT_API, null, {
-          Authorization: `Bearer ${token}`,
-        });
-      }
+      await apiConnector("POST", LOGOUT_API, null);
     } catch (error) {
       console.log("Logout Api error...", error);
     }

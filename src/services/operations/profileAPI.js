@@ -134,10 +134,7 @@ export async function deleteProfileFunction(
     const response = await apiConnector(
       "DELETE",
       DELETE_USER_PROFILE_API,
-      { password },
-      {
-        Authorization: `Bearer ${token}`,
-      }
+      { password }
     );
 
     console.log("response....", response);
