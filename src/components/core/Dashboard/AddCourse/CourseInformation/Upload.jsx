@@ -7,15 +7,14 @@ const Upload = ({title, name, label, register, errors, setValue, getValues,viewD
   const [image, setImage] = useState(null);
   const { editCourse, course } = useSelector((state) => state.course);
 
-  useEffect(()=>{
-    // console.log("Edit data",editData)
-    // console.log()
-    if(editData){
+  useEffect(() => {
+    register(name, { required: true })
+    if (editData) {
       setImage(editData);
-    }else if(viewData){
+    } else if (viewData) {
       setImage(viewData);
     }
-  },[])
+  }, [register, name, editData, viewData])
 
   const handleOnChange = (e) => {
     const file = e.target.files[0]; // Get the first file
@@ -97,7 +96,6 @@ const Upload = ({title, name, label, register, errors, setValue, getValues,viewD
                 <input
                   type="file"
                   id={label}
-                  {...register(name, { required: true })}
                   onChange={handleOnChange}
                   className="hidden"
                 />

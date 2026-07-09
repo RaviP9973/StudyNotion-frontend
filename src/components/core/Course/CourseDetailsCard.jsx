@@ -92,7 +92,10 @@ const CourseDetailsCard = ({
           <p className="text-richblack-100">30-Day Money-Back Guarantee</p>
           <p className="font-semibold">This Course Includes:</p>
           <div className="border border-richblack-600 p-3 rounded-lg bg-richblack-800 flex flex-col gap-1">
-            {JSON.parse(course?.instructions || "[]")?.map((item, index) => (
+            {(Array.isArray(course?.instructions) 
+              ? course.instructions 
+              : JSON.parse(course?.instructions || "[]")
+            )?.map((item, index) => (
               <p key={index} className="text-caribbeangreen-200 text-sm">
                 • {item}
               </p>

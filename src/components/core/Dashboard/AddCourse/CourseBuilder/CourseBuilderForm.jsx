@@ -57,7 +57,6 @@ const CourseBuilderForm = () => {
       return;
     }
 
-    console.log("yaha to aa hi gye")
     dispatch(setStep(3));
   };
 

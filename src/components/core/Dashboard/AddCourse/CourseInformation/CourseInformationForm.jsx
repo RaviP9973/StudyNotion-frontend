@@ -52,13 +52,13 @@ const CourseInformationForm = () => {
       setValue("courseTitle", course.name);
       setValue("courseDescription", course.courseDescription);
       setValue("coursePrice", course.price);
-      setValue("courseTag", course.tag);
+      setValue("courseTags", course.tag);
       setValue("courseBenifits", course.whatYouWillLearn);
-      setValue("courseCategory", course.category);
+      setValue("courseCategory", course.category._id);
       setValue("courseRequirements", course.instructions);
       setValue("courseImage", course.thumbnail);
     }
-      // console.log("couse",course);
+    // console.log("couse",course);
     getCetegories();
   }, []);
 
@@ -68,20 +68,21 @@ const CourseInformationForm = () => {
       currentValues.courseTitle !== course.courseName ||
       currentValues.courseDescription !== course.courseDescription ||
       currentValues.coursePrice !== course.price ||
-      // currentValues.courseTag !== course.courseName ||
+      // currentValues.courseTags !== course.courseName ||
 
-      currentValues.courseTag.toString() !== course.tag.toString() ||
+      currentValues.courseTags.toString() !== course.tag.toString() ||
       currentValues.courseBenifits !== course.whatYouWillLearn ||
-      currentValues.courseCategory._id !== course.category._id ||
+      currentValues.courseCategory !== course.category._id ||
       currentValues.courseImage !== course.thumbnail ||
       currentValues.courseRequirements.toString() !==
-        course.instructions.toString()
+      course.instructions.toString()
     )
       return true;
     else return false;
   };
 
   const onSubmit = async (data) => {
+    console.log("submit handler called")
     if (editCourse) {
       if (isFormUpdated()) {
         const currentValues = getValues();
@@ -120,7 +121,11 @@ const CourseInformationForm = () => {
           );
         }
 
-        formData.append("thumbnail",currentValues.courseImage);
+        if (currentValues.courseTags.toString() !== course.tag.toString()) {
+          formData.append("tag", JSON.stringify(data.courseTags));
+        }
+
+        formData.append("thumbnail", currentValues.courseImage);
 
 
 
@@ -138,7 +143,7 @@ const CourseInformationForm = () => {
       } else {
         toast.error("NO Changes made so far");
       }
-      
+
 
       return;
     }
@@ -152,7 +157,7 @@ const CourseInformationForm = () => {
     formData.append("category", data.courseCategory);
     formData.append("instructions", JSON.stringify(data.courseRequirements));
     // formData.append("status", COURSE_STATUS.DRAFT);
-    formData.append("tag", JSON.stringify(data.CourseTag));
+    formData.append("tag", JSON.stringify(data.courseTags));
     formData.append("thumbnail", data.courseImage);
 
     setLoading(true);
@@ -169,9 +174,13 @@ const CourseInformationForm = () => {
     console.log("PRINTING result", result);
   };
 
+  const onError = (errors, e) => {
+    console.log("Validation errors:", errors);
+  };
+
   return (
     <form
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={handleSubmit(onSubmit, onError)}
       className="rounded-md border-richblack-700 w-[90%] mx-auto space-y-3"
     >
       <div className="flex flex-col gap-1">
@@ -223,7 +232,6 @@ const CourseInformationForm = () => {
           Course Category<sup className="text-pink-200 ">*</sup>
         </label>
         <select
-          name=""
           id="courseCategory"
           defaultValue=""
           {...register("courseCategory", { required: true })}
@@ -245,8 +253,8 @@ const CourseInformationForm = () => {
 
       {/* create a custom component for handeling tags */}
       <ChipInput
-        label="Tag"
-        name="CourseTag"
+        label="Tags"
+        name="courseTags"
         register={register}
         errors={errors}
         setValue={setValue}
@@ -271,16 +279,16 @@ const CourseInformationForm = () => {
           Benifits of the Course<sup className="text-pink-200 ">*</sup>
         </label>
         <textarea
-          name=""
           id="courseBenifits"
           placeholder="Enter Benifits of the course"
           className="w-full min-h-[140px] rounded-[0.5rem] bg-richblack-800 p-[12px] text-richblack-5"
-          {...register("courseBenifits",{required:true})}
-        >
-          {errors.courseBenifits && (
-            <span>Benifits of the course are required</span>
-          )}
-        </textarea>
+          {...register("courseBenifits", { required: true })}
+        />
+        {errors.courseBenifits && (
+          <span className="ml-2 text-xs tracking-wide text-pink-200">
+            Benifits of the course are required
+          </span>
+        )}
       </div>
 
       <RequirementsField
@@ -293,24 +301,24 @@ const CourseInformationForm = () => {
       />
 
       <div className="flex gap-3 justify-between px-3 ">
-      <div>
-        {editCourse && (
-          <button
-            onClick={() => dispatch(setStep(2))}
-            className="w-fit mt-10 h-[40px] bg-richblack-900 border-2 border-richblack-600 text-richblack-5 font-semibold rounded-lg py-2 px-4 flex items-center justify-center hover:bg-richblack-800 transition duration-300 hover:scale-95"
-          >
-            continue without saving
-          </button>
-        )}
-      </div>
+        <div>
+          {editCourse && (
+            <button
+              onClick={() => dispatch(setStep(2))}
+              className="w-fit mt-10 h-[40px] bg-richblack-900 border-2 border-richblack-600 text-richblack-5 font-semibold rounded-lg py-2 px-4 flex items-center justify-center hover:bg-richblack-800 transition duration-300 hover:scale-95"
+            >
+              continue without saving
+            </button>
+          )}
+        </div>
 
-      <div className="flex ">
-        <IconButton
-          text={!editCourse ? "Next" : "Save Changes"}
-          customClasses="w-full mt-10 h-[40px] bg-yellow-50 border-2 border-yellow-200 text-black font-semibold rounded-lg py-2 px-4 flex items-center justify-center hover:bg-yellow-100 transition duration-300 hover:scale-95"
-          type={"submit"}
-        />
-      </div>
+        <div className="flex ">
+          <IconButton
+            text={!editCourse ? "Next" : "Save Changes"}
+            customClasses="w-full mt-10 h-[40px] bg-yellow-50 border-2 border-yellow-200 text-black font-semibold rounded-lg py-2 px-4 flex items-center justify-center hover:bg-yellow-100 transition duration-300 hover:scale-95"
+            type={"submit"}
+          />
+        </div>
 
       </div>
     </form>

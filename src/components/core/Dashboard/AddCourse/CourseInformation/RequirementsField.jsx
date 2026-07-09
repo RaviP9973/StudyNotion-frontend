@@ -30,17 +30,17 @@ const RequirementsField = ({
   useEffect(() => {
     register(name, {
       required: true,
-      validate: (value) => value.length > 0,
+      validate: (value) => value?.length > 0,
     });
     const data = getValues();
     // console.log("data",data);
     
-    setRequirementList((data?.courseRequirements));
-  }, []);
+    setRequirementList(data?.[name] || data?.courseRequirements || []);
+  }, [register, name, getValues]);
 
   useEffect(() => {
     setValue(name, requirementList);
-  }, [requirementList]);
+  }, [requirementList, setValue, name]);
   return (
     <div className="bg-richblack-700 text-white">
       <label htmlFor={name} className="text-md text-richblack-100 ">

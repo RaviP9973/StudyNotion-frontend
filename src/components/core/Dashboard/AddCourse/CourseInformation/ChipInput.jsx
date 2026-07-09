@@ -11,11 +11,11 @@ const ChipInput = ({label,name,register,errors,setValue,getValue}) => {
             required:true,
         });
 
-        if(editCourse){
-            setTags(JSON.parse(course?.tag));
-            setValue(name,JSON.parse(course?.tag));
+        if (editCourse) {
+            setTags(course?.tag || []);
+            setValue(name, course?.tag || []);
         }
-    },[])
+    }, [editCourse, course?.tag, name, register, setValue])
   return (
     <div>
       <label className="text-md text-richblack-100 " htmlFor={name}>{label} <sup>*</sup></label>

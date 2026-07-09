@@ -14,9 +14,10 @@ const {
 export async function getUserEnrolledCourses(token) {
   let result = [];
   try {
-    const authToken = token || JSON.parse(localStorage.getItem("token") || "null");
-    if (!authToken) {
-      throw new Error("Please login again to continue");
+    
+    if(!token){
+      toast.error("Please login again to continue");
+      return;
     }
     // console.log("before the calling of backend");
     console.log("courses api key", GET_USER_ENROLLED_COURSES_API)
@@ -25,9 +26,6 @@ export async function getUserEnrolledCourses(token) {
       "GET",
       GET_USER_ENROLLED_COURSES_API,
       null,
-      {
-        Authorization: `Bearer ${authToken}`,
-      }
     );
 
     if (!response.data.success) {
@@ -43,7 +41,7 @@ export async function getUserEnrolledCourses(token) {
   return result;
 }
 
-export async function updateProfilePicture(token, pfp) {
+export async function updateProfilePicture( pfp) {
   const toastId = toast.loading("Uploading...");
   try {
     const formData = new FormData();
@@ -54,9 +52,6 @@ export async function updateProfilePicture(token, pfp) {
       "PUT",
       UPDATE_PROFILE_PICTURE_API,
       formData,
-      {
-        Authorization: `Bearer ${token}`,
-      }
     );
 
     console.log("update dp api response..", response);
@@ -81,27 +76,24 @@ export async function updateProfilePicture(token, pfp) {
   toast.dismiss(toastId);
 }
 
-export async function updatePersonalDetails(token, formData) {
+export async function updatePersonalDetails( formData) {
   const toastId = toast.loading("updating details...");
   try {
-    console.log(token);
-    console.log(formData);
+    // console.log(token);
+    // console.log(formData);
     const { firstName, lastName, dateOfBirth, gender, contactNumber, about } =
       formData;
     const response = await apiConnector(
       "PUT",
       UPDATE_USER_DETAILS_API,
-      { firstName, lastName, dateOfBirth, gender, contactNumber, about },
-      {
-        Authorization: `Bearer ${token}`,
-      }
+      { firstName, lastName, dateOfBirth, gender, contactNumber, about }
     );
 
     if (!response.data.success) {
       throw new Error(response.data.message);
     }
 
-    console.log("update user details api response",response);
+    console.log("update user details api response", response);
     const user = JSON.parse(localStorage.getItem("user"));
     user.firstName = firstName || user.firstName;
     user.lastName = lastName || user.lastName;
@@ -123,7 +115,6 @@ export async function updatePersonalDetails(token, formData) {
   toast.dismiss(toastId);
 }
 export async function deleteProfileFunction(
-  token,
   password,
   navigate,
   dispatch
@@ -160,19 +151,19 @@ export async function getInstructorData(token) {
   const toastId = toast.loading("loading...");
 
   try {
-    const res = await apiConnector("GET",GET_INSTRUCTOR_DATA_API,null,{
-      Authorization : `Bearer ${token}`
+    const res = await apiConnector("GET", GET_INSTRUCTOR_DATA_API, null, {
+      Authorization: `Bearer ${token}`
     })
-    console.log("GEt_Insructor api response",res);
-    if(!res.data.success){
+    console.log("GEt_Insructor api response", res);
+    if (!res.data.success) {
       throw new Error("Error in geting getInstructorDAta");
-      
+
     }
 
     result = res.data.data;
 
   } catch (error) {
-    console.log("Error while get Instructor dashboard with stats api error ...",error);
+    console.log("Error while get Instructor dashboard with stats api error ...", error);
     toast.error("Could not get instructor data");
   }
 
