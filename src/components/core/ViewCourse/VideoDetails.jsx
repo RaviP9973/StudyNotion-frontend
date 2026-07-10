@@ -22,34 +22,10 @@ const VideoDetails = () => {
     useSelector((state) => state.viewCourse);
   const location = useLocation();
 
-  const [videoData, setVideoData] = useState([]);
+  const [videoData, setVideoData] = useState(null);
   const [videoEnded, setVideoEnded] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // useEffect(() => {
-  //   const setVideoSpecificDetails = async () => {
-  //     if (!courseSectionData.length) return;
-  //     if (!courseId && !sectionId && !subsectionId) {
-  //       navigate("/dashboard/enrolled-courses");
-  //     } else {
-  //       // console.log("courseSectionData", courseSectionData);
-  //       if (sectionId) {
-  //         const filteredData = courseSectionData.filter(
-  //           (course) => course._id === sectionId
-  //         );
-  //         console.log("filteredData",filteredData)
-  //         const filteredVideoData = filteredData?.[0].subSection
-  //         .filter(
-  //           (data) => data._id === subsectionId
-  //         );
-
-  //         setVideoData(filteredVideoData[0]);
-  //         setVideoEnded(false);
-  //       }
-  //     }
-  //   };
-  //   setVideoSpecificDetails();
-  // }, [courseSectionData, courseEntireData, location.pathname]);
   useEffect(() => {
     const setVideoSpecificDetails = async () => {
       if (!courseSectionData.length) return;
@@ -69,6 +45,7 @@ const VideoDetails = () => {
         (data) => data._id === subsectionId
       );
   
+      console.log("filteredVideoData", filteredVideoData.videoUrl);
       if (filteredVideoData) {
         setVideoData(filteredVideoData);
         setVideoEnded(false);
@@ -199,15 +176,15 @@ const VideoDetails = () => {
       {!videoData ? (
         <div>No data found</div>
       ) : (
-        <div className="relative ">
+        <div className="relative w-full aspect-video">
           <ReactPlayer
-            url={videoData?.videoUrl}
+            className="absolute top-0 left-0"
+            src={videoData?.videoUrl}
+            playsinline
             height="100%"
             width="100%"
             controls
-            playIcon={<BsDisplayFill  size={24}/>}
             style={{ backgroundColor: "#000000" }}
-            playing={false}
             onEnded={() => {
               setVideoEnded(true);
             }}
