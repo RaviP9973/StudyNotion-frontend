@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { getPasswordResetToken } from "../services/operations/authAPI";
 import { FaArrowLeftLong } from "react-icons/fa6";
+import ForgotPasswordSkeleton from "../components/core/Auth/ForgotPasswordSkeleton";
 
 const ForgotPassword = () => {
   const { loading } = useSelector((state) => state.auth);
@@ -24,7 +25,7 @@ const ForgotPassword = () => {
   return (
     <div className=" justify-center items-center min-h-[calc(100vh-3.5rem)] grid w-full ">
       {loading ? (
-        <span className="loader"></span>
+        <ForgotPasswordSkeleton />
       ) : (
         <div className="max-w-[500px] p-4 lg:p-8">
           <h1 className="text-3xl font-bold mb-3 text-richblack-5">

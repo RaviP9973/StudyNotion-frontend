@@ -10,6 +10,7 @@ import { categories } from "../../services/apis";
 import { FaAngleDown } from "react-icons/fa6";
 import { FaCartArrowDown } from "react-icons/fa6";
 import { FaBars, FaTimes } from "react-icons/fa";
+import { AnimatePresence, motion } from "motion/react";
 
 const Navbar = () => {
   const { token } = useSelector((state) => state.auth);
@@ -21,6 +22,13 @@ const Navbar = () => {
   const [sublinks, setSublinks] = useState([]);
   const [menuOpen, setMenuOpen] = useState(false);
   const [mobileCatalogOpen, setMobileCatalogOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const fetchSublinks = async () => {
     try {
@@ -82,7 +90,7 @@ const Navbar = () => {
   }, [menuOpen]);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 border-b border-richblack-700 bg-richblack-900">
+    <header className={`fixed top-0 left-0 right-0 z-50 border-b border-richblack-700 transition-all duration-300 ${scrolled ? "bg-richblack-900/85 backdrop-blur-lg shadow-lg shadow-black/20" : "bg-richblack-900"}`}>
       <div className="mx-auto flex h-14 w-11/12 max-w-maxContent items-center justify-between">
         <Link to="/">
           <img src={logo} alt="logo" width={160} height={162} loading="lazy" />
@@ -185,17 +193,35 @@ const Navbar = () => {
         </button>
       </div>
 
+      <AnimatePresence>
       {menuOpen && (
         <>
-          <div className="fixed inset-0 top-14 z-40 bg-black/40 lg:hidden" onClick={handleNavLinkClick} />
-          <div
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            className="fixed inset-0 top-14 z-40 bg-black/40 lg:hidden"
+            onClick={handleNavLinkClick}
+          />
+          <motion.div
             ref={mobileMenuRef}
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "100%" }}
+            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
             className="fixed right-0 top-14 z-50 h-[calc(100vh-3.5rem)] w-72 overflow-y-auto border-l border-richblack-700 bg-richblack-900 p-6 lg:hidden"
           >
             <ul className="flex flex-col gap-2 text-richblack-25">
               {NavbarLinks.map((link, index) => {
                 return (
-                  <li key={index} className="rounded-md">
+                  <motion.li
+                    key={index}
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.05 * index, duration: 0.3 }}
+                    className="rounded-md"
+                  >
                     {link.title === "Catalog" ? (
                       <div>
                         <button
@@ -203,10 +229,17 @@ const Navbar = () => {
                           onClick={() => setMobileCatalogOpen((prev) => !prev)}
                         >
                           <span>{link.title}</span>
-                          <FaAngleDown className={mobileCatalogOpen ? "rotate-180" : ""} />
+                          <FaAngleDown className={`transition-transform duration-300 ${mobileCatalogOpen ? "rotate-180" : ""}`} />
                         </button>
+                        <AnimatePresence>
                         {mobileCatalogOpen && (
-                          <div className="mt-1 flex flex-col gap-1 pl-3">
+                          <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: "auto", opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.25, ease: "easeInOut" }}
+                            className="overflow-hidden mt-1 flex flex-col gap-1 pl-3"
+                          >
                             {sublinks?.length ? (
                               sublinks.map((sublink, idx) => (
                                 <Link
@@ -224,8 +257,9 @@ const Navbar = () => {
                             ) : (
                               <p className="px-3 py-2 text-sm">No categories available</p>
                             )}
-                          </div>
+                          </motion.div>
                         )}
+                        </AnimatePresence>
                       </div>
                     ) : (
                       <Link
@@ -236,7 +270,7 @@ const Navbar = () => {
                         {link.title}
                       </Link>
                     )}
-                  </li>
+                  </motion.li>
                 );
               })}
             </ul>
@@ -272,9 +306,10 @@ const Navbar = () => {
                 </div>
               )}
             </div>
-          </div>
+          </motion.div>
         </>
       )}
+      </AnimatePresence>
     </header>
   );
 };

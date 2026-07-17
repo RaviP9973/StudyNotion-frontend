@@ -1,41 +1,48 @@
 import "./App.css";
-import { useEffect } from "react";
-import { Route, Routes, useNavigate } from "react-router-dom";
-import Home from "./Pages/Home";
+import { useEffect, Suspense, lazy } from "react";
+import { Route, Routes, useNavigate, useLocation } from "react-router-dom";
+import { AnimatePresence } from "motion/react";
+import AnimatedPage from "./components/common/AnimatedPage";
 import Navbar from "./components/common/Navbar";
-import Login from "./Pages/Login";
-import Signup from "./Pages/Signup";
-import ForgotPassword from "./Pages/ForgotPassword";
-import UpdatePassword from "./Pages/UpdatePassword";
-import VerifyEmail from "./Pages/VerifyEmail";
-import About from "./Pages/About";
 import OpenRoute from "./components/core/Auth/OpenRoute";
-import MyProfile from "./components/core/Dashboard/MyProfile";
-import Dashboard from "./Pages/Dashboard";
 import PrivateRoute from "./components/core/Auth/PrivateRoute";
-import Error from "./Pages/Error";
-import EnrolledCourses from "./components/core/Dashboard/EnrolledCourses";
-import Cart from "./components/core/Dashboard/Cart";
 import { ACCOUNT_TYPE } from "./utils/constants";
 import { useDispatch, useSelector } from "react-redux";
-import Setting from "./components/core/Dashboard/Setting";
-import Contact from "./Pages/Contact";
-import AddCourse from "./components/core/Dashboard/AddCourse";
-import MyCourses from "./components/core/Dashboard/InstructorCourses/MyCourses";
-import EditCourse from "./components/core/Dashboard/EditCourse";
-import Catelog from "./Pages/Catelog";
-import CourseDetails from "./Pages/CourseDetails";
-import ViewCourse from "./Pages/ViewCourse";
-import VideoDetails from "./components/core/ViewCourse/VideoDetails";
-import Instructor from "./components/core/Dashboard/InstructorDashboard/Instructor";
-import PurchaseHistory from "./components/core/Dashboard/PurchaseHistory";
 import { logout } from "./services/operations/authAPI";
+
+// Lazy load Pages
+const Home = lazy(() => import("./Pages/Home"));
+const Login = lazy(() => import("./Pages/Login"));
+const Signup = lazy(() => import("./Pages/Signup"));
+const ForgotPassword = lazy(() => import("./Pages/ForgotPassword"));
+const UpdatePassword = lazy(() => import("./Pages/UpdatePassword"));
+const VerifyEmail = lazy(() => import("./Pages/VerifyEmail"));
+const About = lazy(() => import("./Pages/About"));
+const Contact = lazy(() => import("./Pages/Contact"));
+const Dashboard = lazy(() => import("./Pages/Dashboard"));
+const Catelog = lazy(() => import("./Pages/Catelog"));
+const CourseDetails = lazy(() => import("./Pages/CourseDetails"));
+const ViewCourse = lazy(() => import("./Pages/ViewCourse"));
+const Error = lazy(() => import("./Pages/Error"));
+
+// Lazy load Dashboard/Course components
+const MyProfile = lazy(() => import("./components/core/Dashboard/MyProfile"));
+const Setting = lazy(() => import("./components/core/Dashboard/Setting"));
+const EnrolledCourses = lazy(() => import("./components/core/Dashboard/EnrolledCourses"));
+const Cart = lazy(() => import("./components/core/Dashboard/Cart"));
+const PurchaseHistory = lazy(() => import("./components/core/Dashboard/PurchaseHistory"));
+const AddCourse = lazy(() => import("./components/core/Dashboard/AddCourse"));
+const MyCourses = lazy(() => import("./components/core/Dashboard/InstructorCourses/MyCourses"));
+const EditCourse = lazy(() => import("./components/core/Dashboard/EditCourse"));
+const Instructor = lazy(() => import("./components/core/Dashboard/InstructorDashboard/Instructor"));
+const VideoDetails = lazy(() => import("./components/core/ViewCourse/VideoDetails"));
 
 
 function App() {
   const { user } = useSelector((state) => state.profile);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const handleTokenExpired = () => {
@@ -51,49 +58,64 @@ function App() {
   // useEffect(()=>{
   //   console.log(user.accountType);
   // },[])
+
+  // Scroll to top on route change
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
   return (
     <div className="w-screen min-h-screen bg-richblack-900 flex flex-col font-inter ">
       <Navbar />
       <div className="mt-14">
 
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/catalog/:catalogName" element={<Catelog />} />
-          <Route path="/courses/:courseId" element={<CourseDetails />} />
+        <AnimatePresence mode="wait">
+        <Suspense fallback={<div className="grid min-h-[calc(100vh-3.5rem)] place-items-center"><div className="loader"></div></div>}>
+        <Routes location={location} key={location.pathname}>
+          <Route path="/" element={<AnimatedPage><Home /></AnimatedPage>} />
+          <Route path="/catalog/:catalogName" element={<AnimatedPage><Catelog /></AnimatedPage>} />
+          <Route path="/courses/:courseId" element={<AnimatedPage><CourseDetails /></AnimatedPage>} />
           <Route
             path="/login"
             element={
-              <OpenRoute>
-                <Login />
-              </OpenRoute>
+              <AnimatedPage>
+                <OpenRoute>
+                  <Login />
+                </OpenRoute>
+              </AnimatedPage>
             }
           />
           <Route
             path="/signup"
             element={
-              <OpenRoute>
-                <Signup />
-              </OpenRoute>
+              <AnimatedPage>
+                <OpenRoute>
+                  <Signup />
+                </OpenRoute>
+              </AnimatedPage>
             }
           />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/forgot-password" element={<AnimatedPage><ForgotPassword /></AnimatedPage>} />
           <Route
             path="/update-password/:id"
             element={
-              <OpenRoute>
-                <UpdatePassword />
-              </OpenRoute>
+              <AnimatedPage>
+                <OpenRoute>
+                  <UpdatePassword />
+                </OpenRoute>
+              </AnimatedPage>
             }
           />
-          <Route path="/verify-email" element={<VerifyEmail />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
+          <Route path="/verify-email" element={<AnimatedPage><VerifyEmail /></AnimatedPage>} />
+          <Route path="/about" element={<AnimatedPage><About /></AnimatedPage>} />
+          <Route path="/contact" element={<AnimatedPage><Contact /></AnimatedPage>} />
 
           <Route
             element={
-              <PrivateRoute>
-                <Dashboard />
-              </PrivateRoute>
+              <AnimatedPage>
+                <PrivateRoute>
+                  <Dashboard />
+                </PrivateRoute>
+              </AnimatedPage>
             }
           >
             <Route path="dashboard/my-profile" element={<MyProfile />} />
@@ -142,8 +164,10 @@ function App() {
             }
           </Route>
 
-          <Route path="*" element={<Error />} />
+          <Route path="*" element={<AnimatedPage><Error /></AnimatedPage>} />
         </Routes>
+        </Suspense>
+        </AnimatePresence>
       </div>
     </div>
   );

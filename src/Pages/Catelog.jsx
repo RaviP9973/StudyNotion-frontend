@@ -5,6 +5,7 @@ import { getCatalogPageData } from "../services/operations/pageAndComponentDetai
 import { fetchCourseCategory } from "../services/operations/courseDetailsAPI";
 import CourseSlider from "../components/core/Catalog/CourseSlider";
 import CourseCard from "../components/core/Catalog/CourseCard";
+import CatalogPageSkeleton from "../components/core/Catalog/CatalogPageSkeleton";
 
 const Catelog = () => {
   const { catalogName } = useParams();
@@ -57,14 +58,11 @@ const Catelog = () => {
   }, [categoryId]);
 
   return (
-    <div >
+    <div className="text-white mx-auto">
       {loading ? (
-        <div className="w-full h-[calc(100vh-3.5rem)] flex items-center justify-center">
-          <div className="loader"></div>
-
-        </div>
+        <CatalogPageSkeleton />
       ) : (
-        <div className="text-white  mx-auto">
+        <>
           <div className="w-full bg-richblack-800">
           <div className=" py-10 w-11/12 mx-auto ">
             {/* route */}
@@ -118,9 +116,9 @@ const Catelog = () => {
               </div>
             </div>
           </div>
-          <Footer />
-        </div>
+        </>
       )}
+      <Footer />
     </div>
   );
 };

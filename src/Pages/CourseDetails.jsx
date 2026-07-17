@@ -13,6 +13,7 @@ import CourseDetailsCard from "../components/core/Course/CourseDetailsCard";
 import { FaChevronDown } from "react-icons/fa";
 import { LuTvMinimalPlay } from "react-icons/lu";
 import Footer from "../components/common/Footer"
+import CourseDetailsSkeleton from "../components/core/Course/CourseDetailsSkeleton"
 
 
 const CourseDetails = () => {
@@ -92,8 +93,9 @@ const CourseDetails = () => {
 
   if (loading) {
     return (
-      <div className="fixed inset-0 top-0 left-0 flex items-center justify-center">
-        <div className="loader"></div>
+      <div>
+        <CourseDetailsSkeleton />
+        <Footer />
       </div>
     );
   }
@@ -121,10 +123,10 @@ const CourseDetails = () => {
   } = courseData;
 
   return (
-    <div className="flex flex-col items-center text-white  mx-auto w-screen">
-      <div className="bg-richblack-800 w-screen relative">
-        <div className=" py-12  w-10/12 mx-auto">
-          <div className="w-[65%] flex flex-col gap-3 border-r">
+    <div className="flex flex-col items-center text-white mx-auto w-full">
+      <div className="bg-richblack-800 w-full relative">
+        <div className="py-12 w-11/12 lg:w-10/12 mx-auto">
+          <div className="w-full lg:w-[65%] flex flex-col gap-3 lg:border-r">
             <p className="text-richblack-100">
               Home / Learning /{" "}
               <span className="text-yellow-50">
@@ -133,7 +135,7 @@ const CourseDetails = () => {
             </p>
             <p className="text-3xl text-richblack-5 font-semibold">{name}</p>
             <p className="text-lg text-richblack-100">{courseDescription}</p>
-            <div className="flex flex-row gap-2">
+            <div className="flex flex-row flex-wrap gap-2">
               <span>{avgReviewCount || 0}</span>
               <RatingStars Review_Count={avgReviewCount} Star_Size={24} />
               <span> {`(${ratingAndReviews.length}) reviews`} </span>
@@ -162,8 +164,8 @@ const CourseDetails = () => {
           handleBuyCourse={handleBuyCourse}
         />
       </div>
-      <div className="w-10/12 mt-8">
-        <div className=" w-[65%] border border-richblack-600  p-4">
+      <div className="w-11/12 lg:w-10/12 mt-8">
+        <div className="w-full lg:w-[65%] border border-richblack-600 p-4 rounded-lg">
           <p className="text-3xl">What you'll learn</p>
           <div className="flex flex-col gap-2">{
             whatYouWillLearn.split("\r\n").map((item,index) => 
@@ -172,13 +174,13 @@ const CourseDetails = () => {
             }</div>
         </div>
       </div>
-      <div className="w-10/12 mt-8 ">
-        <div className="w-[65%]">
+      <div className="w-11/12 lg:w-10/12 mt-8">
+        <div className="w-full lg:w-[65%]">
           <p className="text-3xl">Course Content</p>
         </div>
 
         <div className=" gap-x-3 justify-between">
-          <div className="flex justify-between  w-[65%]">
+          <div className="flex flex-col sm:flex-row justify-between w-full lg:w-[65%] gap-2">
 
           <div>
             <span>{courseContent.length} section(s) </span>
@@ -199,7 +201,7 @@ const CourseDetails = () => {
           {/* to do 
           yaha pe lectures ka section aur subsection show karana h 
          */}
-          <div className="mt-4 w-[65%]">
+          <div className="mt-4 w-full lg:w-[65%]">
             {courseContent?.map((section, index) => {
               // Calculate total duration for this section
               const totalSectionDuration = section.subSection.reduce((acc, subsection) => {
@@ -262,7 +264,7 @@ const CourseDetails = () => {
 
         </div >
 
-        <div className="w-[65%] mb-10 flex flex-col gap-3">
+        <div className="w-full lg:w-[65%] mb-10 flex flex-col gap-3">
           <p className="text-3xl ">Author</p>
 
           <div className="flex items-center justify-start gap-3">
@@ -276,7 +278,7 @@ const CourseDetails = () => {
         </div>
       </div>
 
-      <div className="w-screen">
+      <div className="w-full">
       <Footer />
 
       </div>

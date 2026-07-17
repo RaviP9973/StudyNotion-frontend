@@ -11,6 +11,7 @@ import InstrucrtorSection from "../components/core/HomePage/InstrucrtorSection";
 import ExploreMore from "../components/core/HomePage/ExploreMore";
 import Footer from "../components/common/Footer";
 import ReviewSlider from "../components/common/ReviewSlider";
+import ScrollReveal from "../components/common/ScrollReveal";
 
 const Home = () => {
   return (
@@ -45,13 +46,15 @@ const Home = () => {
             Book a Demo
           </CTAButton>
         </div>
+        <ScrollReveal>
         <div className="mx-3 my-12 shadow-blue-200 w-[70%] relative">
           <div className="grad2 -top-10 w-[70%]"></div>
           <video muted loop autoPlay className="video">
             <source src={Banner} type="video/mp4"></source>
           </video>
         </div>
-
+        </ScrollReveal>
+        <ScrollReveal>
         {/* code section 1 */}
         <div>
           <CodeBlocks
@@ -81,6 +84,8 @@ const Home = () => {
             backgroundGradient={"grad"}
           />
         </div>
+        </ScrollReveal>
+        <ScrollReveal>
         {/* code section 2 */}
         <div>
           <CodeBlocks
@@ -110,8 +115,11 @@ const Home = () => {
             backgroundGradient={"grad2"}
           />
         </div>
+        </ScrollReveal>
 
+        <ScrollReveal>
         <ExploreMore/>
+        </ScrollReveal>
       </div>
 
       {/* section 2 */}
@@ -154,16 +162,24 @@ const Home = () => {
           
 
 
+        <ScrollReveal>
         <TimelineSection/>
+        </ScrollReveal>
+        <ScrollReveal>
         <LearningLanguageSection/>
+        </ScrollReveal>
         </div>
 
       </div>
       {/* section 3 */}
       
       <div className=" w-11/12 mx-auto max-w-maxContent flex flex-col items-center justify-between gap-8 bg-richblack-900 text-white mb-5">
+        <ScrollReveal>
         <InstrucrtorSection/>
+        </ScrollReveal>
+        <ScrollReveal>
         <h2 className="text-center text-4xl font-semibold mt-10 ">Review from Learners</h2>
+        </ScrollReveal>
 
       </div>
       <div className="w-11/12 mx-auto mb-10">

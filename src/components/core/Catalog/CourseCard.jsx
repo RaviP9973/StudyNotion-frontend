@@ -13,14 +13,14 @@ const CourseCard = ({ course }) => {
   }, []);
 
   return (
-    <div className="">
+    <div className="group">
       <Link to={`/courses/${course._id}`}>
-        <div className="">
-          <div className="mb-4">
+        <div className="rounded-xl border border-transparent hover:border-richblack-600 hover:shadow-lg hover:shadow-black/20 hover:scale-[1.02] transition-all duration-300 p-2">
+          <div className="mb-4 overflow-hidden rounded-xl">
             <img
               src={course?.thumbnail}
               alt=""
-              className="h-[250px] w-full rounded-xl object-contain"
+              className="h-[250px] w-full rounded-xl object-contain group-hover:scale-105 transition-transform duration-500"
             />
           </div>
           <div className="flex flex-col gap-2 ">

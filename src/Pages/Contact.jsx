@@ -7,9 +7,9 @@ import Footer from "../components/common/Footer";
 const Contact = () => {
   return (
     <div>
-    <div className="text-white mt-14 mx-auto mb-10">
-      <div className="flex max-w-maxContent mx-auto gap-10">
-        <div className=" flex flex-col gap-10 justify-center bg-richblack-700 w-[30%] h-fit p-5 rounded-lg outline-1 outline-richblack-100 border-1 border-richblack-200  ">
+    <div className="text-white mt-14 mx-auto mb-10 px-4">
+      <div className="flex flex-col lg:flex-row max-w-maxContent mx-auto gap-10">
+        <div className=" flex flex-col gap-10 justify-center bg-richblack-700 w-full lg:w-[35%] h-fit p-5 rounded-lg outline-1 outline-richblack-100 border-1 border-richblack-200  ">
           <div className="">
             <div className="flex gap-3">
               {/* icon */}
@@ -60,7 +60,7 @@ const Contact = () => {
           <div></div>
         </div>
 
-        <div className="border-[1px] border-richblack-200 w-[50%] p-10 rounded-lg bg-richblack-700">
+        <div className="border-[1px] border-richblack-200 w-full lg:w-[60%] p-6 sm:p-10 rounded-lg bg-richblack-700">
           <div>
             <h1 className="text-4xl text-richblack-5">Got a Idea? We've got the skills. Let's team up</h1>
 
