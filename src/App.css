@@ -135,10 +135,226 @@ body {
   background-color: #ccc;
 }
 
-/* Style the accordion panel. Note: hidden by default */
 .panel {
   padding: 0 18px;
   background-color: white;
   display: none;
   overflow: hidden;
+}
+
+/* ===================================================================
+   LIGHT MODE OVERRIDES
+   When .light-mode is on <html>, swap the entire dark palette to light.
+   All transitions are 500ms for a smooth feel.
+   =================================================================== */
+
+/* ---- Global transition for smooth theme switching ---- */
+.light-mode *,
+.light-mode *::before,
+.light-mode *::after {
+  transition:
+    background-color 0.5s ease,
+    color 0.5s ease,
+    border-color 0.5s ease,
+    box-shadow 0.5s ease;
+}
+
+/* ---- Body & root backgrounds ---- */
+.light-mode {
+  background-color: #F1F2FF !important; /* richblack-5 */
+}
+
+/* ---- Backgrounds ---- */
+/* richblack-900 → richblack-5 */
+.light-mode .bg-richblack-900 {
+  background-color: #F1F2FF !important;
+}
+/* richblack-800 → white */
+.light-mode .bg-richblack-800 {
+  background-color: #ffffff !important;
+}
+/* richblack-700 → richblack-25 */
+.light-mode .bg-richblack-700 {
+  background-color: #DBDDEA !important;
+}
+/* richblack-600 → richblack-50 */
+.light-mode .bg-richblack-600 {
+  background-color: #C5C7D4 !important;
+}
+/* richblack-500 → richblack-100 */
+.light-mode .bg-richblack-500 {
+  background-color: #AFB2BF !important;
+}
+
+/* ---- Text colors ---- */
+/* Light text → dark text */
+.light-mode .text-richblack-5 {
+  color: #000814 !important; /* richblack-900 */
+}
+.light-mode .text-richblack-25 {
+  color: #161D29 !important; /* richblack-800 */
+}
+.light-mode .text-richblack-50 {
+  color: #2C333F !important; /* richblack-700 */
+}
+.light-mode .text-richblack-100 {
+  color: #424854 !important; /* richblack-600 */
+}
+.light-mode .text-richblack-200 {
+  color: #585D69 !important; /* richblack-500 */
+}
+.light-mode .text-richblack-300 {
+  color: #6E727F !important; /* richblack-400 */
+}
+.light-mode .text-white {
+  color: #000814 !important;
+}
+/* Dark text → light text (for elements on dark bg that become light) */
+.light-mode .text-richblack-900 {
+  color: #000814 !important;
+}
+
+/* ---- Border colors ---- */
+.light-mode .border-richblack-700 {
+  border-color: #DBDDEA !important;
+}
+.light-mode .border-richblack-600 {
+  border-color: #C5C7D4 !important;
+}
+.light-mode .border-richblack-800 {
+  border-color: #E2E2E2 !important;
+}
+
+/* ---- Navbar specific overrides ---- */
+.light-mode header.fixed {
+  background-color: rgba(241, 242, 255, 0.92) !important;
+  border-bottom-color: #DBDDEA !important;
+}
+.light-mode header.fixed .shadow-lg {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.07),
+    0 2px 4px -1px rgba(0, 0, 0, 0.04) !important;
+}
+
+/* ---- Glassmorphism overrides ---- */
+.light-mode .glass {
+  background: rgba(255, 255, 255, 0.7) !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.06) !important;
+}
+.light-mode .glass2 {
+  background: rgba(255, 255, 255, 0.85) !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.06) !important;
+}
+
+/* ---- Loader color ---- */
+.light-mode .loader {
+  color: #000814 !important;
+}
+
+/* ---- Input & form elements ---- */
+.light-mode input,
+.light-mode textarea,
+.light-mode select {
+  background-color: #ffffff !important;
+  color: #000814 !important;
+  border-color: #DBDDEA !important;
+}
+.light-mode input::placeholder,
+.light-mode textarea::placeholder {
+  color: #838894 !important;
+}
+.light-mode input:focus,
+.light-mode textarea:focus,
+.light-mode select:focus {
+  border-color: #FFD60A !important;
+  box-shadow: 0 0 0 2px rgba(255, 214, 10, 0.15) !important;
+}
+
+/* ---- Drop shadow adjustments ---- */
+.light-mode .video {
+  filter: drop-shadow(20px 20px 0px #DBDDEA) !important;
+}
+
+/* ---- Gradient backgrounds (keep vibrant) ---- */
+.light-mode .grad {
+  opacity: 0.15;
+}
+.light-mode .grad2 {
+  opacity: 0.15;
+}
+
+/* ---- Scrollbar ---- */
+.light-mode ::-webkit-scrollbar {
+  width: 8px;
+}
+.light-mode ::-webkit-scrollbar-track {
+  background: #F1F2FF;
+}
+.light-mode ::-webkit-scrollbar-thumb {
+  background: #C5C7D4;
+  border-radius: 4px;
+}
+.light-mode ::-webkit-scrollbar-thumb:hover {
+  background: #AFB2BF;
+}
+
+/* ---- Backdrop blur navbar overrides ---- */
+.light-mode .bg-richblack-900\/85 {
+  background-color: rgba(241, 242, 255, 0.90) !important;
+}
+
+/* ---- Mobile menu ---- */
+.light-mode .bg-black\/40 {
+  background-color: rgba(0, 0, 0, 0.15) !important;
+}
+
+/* ---- Cards & sections with pure-greys ---- */
+.light-mode .bg-pure-greys-5 {
+  background-color: #ffffff !important;
+}
+
+/* ---- Shadows ---- */
+.light-mode .shadow-black\/20 {
+  --tw-shadow-color: rgba(0, 0, 0, 0.06) !important;
+}
+
+/* ---- Accordion ---- */
+.light-mode .accordion {
+  background-color: #F1F2FF !important;
+  color: #000814 !important;
+}
+.light-mode .active,
+.light-mode .accordion:hover {
+  background-color: #DBDDEA !important;
+}
+
+/* ---- The theme toggle button itself in light mode ---- */
+.light-mode #theme-toggle-btn {
+  background-color: #F1F2FF !important;
+  border-color: #DBDDEA !important;
+}
+.light-mode #theme-toggle-btn:hover {
+  border-color: #FFD60A !important;
+}
+
+/* ---- Placeholder/skeleton elements ---- */
+.light-mode .animate-pulse {
+  background-color: #DBDDEA !important;
+}
+
+/* ---- richblack-5 bg in light mode stays white ---- */
+.light-mode .bg-richblack-5 {
+  background-color: #ffffff !important;
+}
+.light-mode .bg-richblack-25 {
+  background-color: #F1F2FF !important;
+}
+
+/* ---- Hover state overrides ---- */
+.light-mode .hover\:bg-richblack-800:hover {
+  background-color: #F1F2FF !important;
+}
+.light-mode .hover\:bg-richblack-50:hover {
+  background-color: #DBDDEA !important;
 }

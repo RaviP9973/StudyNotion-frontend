@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, matchPath } from "react-router-dom";
-import logo from "../../Assets/Logo/Logo-Full-Light.png";
+import logoLight from "../../Assets/Logo/Logo-Full-Light.png";
+import logoDark from "../../Assets/Logo/Logo-Full-Dark.png";
 import { NavbarLinks } from "../../data/navbar-links";
 import { useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -11,11 +12,13 @@ import { FaAngleDown } from "react-icons/fa6";
 import { FaCartArrowDown } from "react-icons/fa6";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { AnimatePresence, motion } from "motion/react";
+import ThemeToggle from "./ThemeToggle";
 
 const Navbar = () => {
   const { token } = useSelector((state) => state.auth);
   const { user } = useSelector((state) => state.profile);
   const { totalItems } = useSelector((state) => state.cart);
+  const { darkMode } = useSelector((state) => state.theme);
 
   const location = useLocation();
 
@@ -93,7 +96,7 @@ const Navbar = () => {
     <header className={`fixed top-0 left-0 right-0 z-50 border-b border-richblack-700 transition-all duration-300 ${scrolled ? "bg-richblack-900/85 backdrop-blur-lg shadow-lg shadow-black/20" : "bg-richblack-900"}`}>
       <div className="mx-auto flex h-14 w-11/12 max-w-maxContent items-center justify-between">
         <Link to="/">
-          <img src={logo} alt="logo" width={160} height={162} loading="lazy" />
+          <img src={darkMode ? logoLight : logoDark} alt="logo" width={160} height={162} loading="lazy" />
         </Link>
 
         <nav className="hidden lg:block">
@@ -154,6 +157,7 @@ const Navbar = () => {
         </nav>
 
         <div className="hidden items-center gap-x-4 lg:flex">
+          <ThemeToggle />
           {user && user.accountType !== "Instructor" && (
             <Link to="/dashboard/cart" className="relative">
               <FaCartArrowDown className="text-2xl text-richblack-100" />
@@ -276,6 +280,10 @@ const Navbar = () => {
             </ul>
 
             <div className="mt-6 flex flex-col gap-3">
+              <div className="flex items-center gap-2">
+                <span className="text-richblack-100 text-sm">Theme</span>
+                <ThemeToggle />
+              </div>
               {user && user.accountType !== "Instructor" && (
                 <Link to="/dashboard/cart" className="relative w-fit" onClick={handleNavLinkClick}>
                   <FaCartArrowDown className="text-2xl text-richblack-100" />

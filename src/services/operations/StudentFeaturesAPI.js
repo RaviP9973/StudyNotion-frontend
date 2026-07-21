@@ -26,7 +26,7 @@ function loadScript(src){
     })
 }
 
-export async function buyCourse(token,courses,userDetails,navigate,dispatch){
+export async function buyCourse(courses,userDetails,navigate,dispatch){
     const toastId = toast.loading("Loading...")
     try {
         const res = await loadScript("https://checkout.razorpay.com/v1/checkout.js")
@@ -35,10 +35,7 @@ export async function buyCourse(token,courses,userDetails,navigate,dispatch){
             return ;
         }
 
-        const orderResponse = await apiConnector("POST",COURSE_PAYMENT_API,{courses}, {
-            
-            Authorization: `Bearer ${token}`
-        })
+        const orderResponse = await apiConnector("POST",COURSE_PAYMENT_API,{courses})
         console.log("order response...",orderResponse)
 
         if(!orderResponse.data.success){
@@ -55,15 +52,15 @@ export async function buyCourse(token,courses,userDetails,navigate,dispatch){
             order_id: orderResponse.data.orderId,
             name: "StudyNotion",
             description: "Thank you for purchasing the course",
-            image: rzpLogo,
-            prefil: {
+            // image: rzpLogo, // Disabled for local development due to CORS loopback policy
+            prefill: {
                 name:`${userDetails.firstName}`,
                 email: userDetails.email
             },
             handler: function(response){
-                sendPaymentSuccessEmail(response,orderResponse.data.amount,token);
+                sendPaymentSuccessEmail(response,orderResponse.data.amount);
 
-                verifyPayment({...response,courses},token,navigate,dispatch )
+                verifyPayment({...response,courses},navigate,dispatch )
             }
         }
 
@@ -82,16 +79,12 @@ export async function buyCourse(token,courses,userDetails,navigate,dispatch){
     toast.dismiss(toastId);
 }
 
-async function sendPaymentSuccessEmail(response,amount,token){
+async function sendPaymentSuccessEmail(response,amount){
     try {
         await apiConnector("POST",SEND_PAYMENT_SUCCESS_EMAIL_API , {
             orderId: response.razorpay_order_id,
             paymentId: response.razorpay_payment_id,
             amount,
-            token
-        },{
-            
-            Authorization: `Bearer ${token}`
         })
     } catch (error) {
         console.log("error in  payment mail sender api",error);
@@ -99,15 +92,13 @@ async function sendPaymentSuccessEmail(response,amount,token){
     }
 }
 
-async function verifyPayment(bodyData,token,navigate,dispatch){
+async function verifyPayment(bodyData,navigate,dispatch){
     const toastId = toast.loading("Verifying Payment")
 
     dispatch(setPaymentLoading(true))
 
     try {
-        const response = await apiConnector("POST",COURSE_VERIFY_API,bodyData,{
-            Authorization: `Bearer ${token}`
-        })
+        const response = await apiConnector("POST",COURSE_VERIFY_API,bodyData)
 
         if(!response.data.success){
             throw new Error(response.data.message);

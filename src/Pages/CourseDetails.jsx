@@ -77,7 +77,7 @@ const CourseDetails = () => {
   const handleBuyCourse = async () => {
     if (token) {
       // console.log("courseId",courseId)
-      buyCourse(token, [courseId], user, navigate, dispatch);
+      buyCourse([courseId], user, navigate, dispatch);
       return;
     }
 

@@ -3,11 +3,12 @@ import { FooterLink2 } from "../../data/footer-links";
 import { Link } from "react-router-dom";
 
 // Images
-// import Logo from "../../assets/Logo/Logo-Full-Light.png";
-import Logo from "../../Assets/Logo/Logo-Full-Light.png";
+import LogoLight from "../../Assets/Logo/Logo-Full-Light.png";
+import LogoDark from "../../Assets/Logo/Logo-Full-Dark.png";
 
 // Icons
 import { FaFacebook, FaGoogle, FaTwitter, FaYoutube } from "react-icons/fa";
+import { useSelector } from "react-redux";
 
 const BottomFooter = ["Privacy Policy", "Cookie Policy", "Terms"];
 const Resources = [
@@ -24,6 +25,8 @@ const Plans = ["Paid memberships", "For students", "Business solutions"];
 const Community = ["Forums", "Chapters", "Events"];
 
 const Footer = () => {
+  const { darkMode } = useSelector((state) => state.theme);
+  const Logo = darkMode ? LogoLight : LogoDark;
   return (
     <div className="bg-richblack-800">
       <div className="flex lg:flex-row gap-8 items-center justify-between w-11/12 max-w-maxContent text-richblack-400 leading-6 mx-auto relative py-14">

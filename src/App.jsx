@@ -40,9 +40,20 @@ const VideoDetails = lazy(() => import("./components/core/ViewCourse/VideoDetail
 
 function App() {
   const { user } = useSelector((state) => state.profile);
+  const { darkMode } = useSelector((state) => state.theme);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
+
+  // Apply/remove theme class on the html element
+  useEffect(() => {
+    const root = document.documentElement;
+    if (darkMode) {
+      root.classList.remove("light-mode");
+    } else {
+      root.classList.add("light-mode");
+    }
+  }, [darkMode]);
 
   useEffect(() => {
     const handleTokenExpired = () => {
@@ -64,7 +75,9 @@ function App() {
     window.scrollTo(0, 0);
   }, [location.pathname]);
   return (
-    <div className="w-screen min-h-screen bg-richblack-900 flex flex-col font-inter ">
+    <div className={`w-screen min-h-screen flex flex-col font-inter transition-colors duration-500 ${
+      darkMode ? "bg-richblack-900" : "bg-richblack-5"
+    }`}>
       <Navbar />
       <div className="mt-14">
 

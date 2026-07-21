@@ -14,7 +14,7 @@ const RenderTotalAmount = () => {
     const handleBuyCourse = ()=>{
         const courses = cart.map((course) => course._id)
         console.log("Bought these courses: ",courses);
-        buyCourse(token, courses,user,navigate,dispatch);
+        buyCourse(courses, user, navigate, dispatch);
         //Api integrate krna h
     }
   return (
